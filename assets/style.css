@@ -1,0 +1,120 @@
+/* MOBILE FIRST */
+
+/* GERAL */
+.container {
+    padding: 30px;
+}
+/* VARIÁVEIS */
+:root {
+    --head-light: #FFC2AA;
+    --head-stand: #AA5939;
+    --head-dark: #551800;
+
+    --main-light: #718EA4;
+    --main-stand: #294F6D;
+    --main-dark: #042037;
+
+    --game-light: #FFECAA;
+    --game-stand: #AA9139;
+    --game-dark: #554200;
+
+    --title-size: 48px;
+    --subtt-size: 32px;
+    --texts-size: 18px;
+}
+/* BODY */
+body {
+    font-family: 'Montserrat',sans-serif;
+    width: 100%;
+}
+/* HEADER */
+header {
+    width: 100%;
+    background-color: var(--head-stand);
+    }
+    header .container {
+        text-align: center;
+    }
+    header .container h1 {
+        font-size: var(--title-size);
+        font-weight: bold;
+        color: var(--head-dark);
+        text-shadow: 2px 2px 2px var(--head-light);
+    }
+/* MAIN */
+main {
+    width: 100%;
+    background-color: var(--main-stand);
+    }
+    main .container {
+        text-align: center;
+    }
+    main .container h2 {
+        font-size: var(--subtt-size);
+        font-weight: bold;
+        color: var(--main-dark);
+        text-shadow: 1px 1px 1px var(--main-light);
+        padding-bottom: 30px;
+    }
+    main .container button {
+        font-size: var(--subtt-size);
+        font-weight: bold;
+        color: var(--head-dark);
+        text-shadow: 1px 1px 1px var(--head-light);
+        background-color: var(--head-stand);
+        border: none;
+        border-radius: 8px;
+        box-shadow: 3px 3px  var(--head-light);
+        padding: 8px 32px 8px 32px;
+    }   
+        main .container button:hover {
+            color: var(--game-dark);
+            text-shadow: 1px 1px 1px var(--game-light);
+            background-color: var(--game-stand);
+            box-shadow: 1px 1px var(--game-light) ;
+            transform: translate(2px,2px);
+        }       
+    main .container .gameContainer {
+        max-width: 263px;
+        margin: 0 auto;
+        box-sizing: border-box;
+        margin-top: 30px;
+        border: 4px solid var(--game-dark);
+        background-color: var(--game-stand);
+        box-shadow: 3px 3px 3px var(--game-light);
+        
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+        grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+
+    }
+    main .container .gameContainer span {
+        font-size: var(--texts-size);
+        padding: 4px 0;
+        border: 1px solid var(--game-dark);
+        }
+        main .container .gameContainer span:focus {
+            background-color: var(--game-light);
+        }
+
+
+/* MEDIA QUERIES */
+@media screen and (min-width: 600px) {
+
+/* GERAL */
+/* BODY */
+/* HEADER */
+/* MAIN */
+
+
+}
+
+@media screen and (min-width: 900px) {
+
+/* GERAL */
+/* BODY */
+/* HEADER */
+/* MAIN */
+
+
+}
