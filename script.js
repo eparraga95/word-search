@@ -3,33 +3,34 @@
 // ===================
 
 // todas as letras do alfabeto
-let alphabet = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"];
+const alphabet = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"];
 
 
 // banco de palavras para usar no jogo
-let palavras = ['APRENDER', 'ESCUTAR', 'DOR', 'CONFORTO', 'KENZIE', 'FAZER', 'TENTAR', 'SABER', 'ENTENDER', 'ENSINO', 'PROGRAMAR', 'TESTAR', 'ENTRAR', 'PSIQUE', 'ERRAR', 'LER', 'FALAR', 'GOSTAR', 'PROBLEMA', 'LONGE'];
+const palavras = ['APRENDER', 'ESCUTAR', 'DOR', 'CONFORTO', 'KENZIE', 'FAZER', 'TENTAR', 'SABER', 'ENTENDER', 'ENSINO', 'PROGRAMAR', 'TESTAR', 'ENTRAR', 'PSIQUE', 'ERRAR', 'LER', 'FALAR', 'GOSTAR', 'PROBLEMA', 'LONGE'];
 
 
 // o board (tabuleiro) do jogo
-let board = [
-    [' ',' ',' ',' ',' ',' ',' ',' ',' ',' '],
-    [' ',' ',' ',' ',' ',' ',' ',' ',' ',' '],
-    [' ',' ',' ',' ',' ',' ',' ',' ',' ',' '],
-    [' ',' ',' ',' ',' ',' ',' ',' ',' ',' '],
-    [' ',' ',' ',' ',' ',' ',' ',' ',' ',' '],
-    [' ',' ',' ',' ',' ',' ',' ',' ',' ',' '],
-    [' ',' ',' ',' ',' ',' ',' ',' ',' ',' '],
-    [' ',' ',' ',' ',' ',' ',' ',' ',' ',' '],
-    [' ',' ',' ',' ',' ',' ',' ',' ',' ',' '],
-    [' ',' ',' ',' ',' ',' ',' ',' ',' ',' '],
+const board = [
+    ['','','','','','','','','',''],
+    ['','','','','','','','','',''],
+    ['','','','','','','','','',''],
+    ['','','','','','','','','',''],
+    ['','','','','','','','','',''],
+    ['','','','','','','','','',''],
+    ['','','','','','','','','',''],
+    ['','','','','','','','','',''],
+    ['','','','','','','','','',''],
+    ['','','','','','','','','',''],
 ];
+
 
 // =================
 //      FUNÇÕES
 // =================
 
 
-// GERA UM NUMERO ALEATÓRIO
+// GERA UM NUMERO ALEATÓRIO DE 0 n-1
 function randomNum(n) {
     return Math.floor(Math.random() * n)
 }
@@ -39,7 +40,7 @@ function randomNum(n) {
 // SELECIONA PALAVRAS
 function wordSelector(n) {
 
-    let wordCopy = palavras.slice(0)
+    let wordCopy = palavras.slice()
     let selectedWords = [];
 
     for (let i = 0; i < n; i++) {
@@ -55,9 +56,11 @@ function wordSelector(n) {
 // SELECIONA LINHAS
 function lineSelectorNoRepeat(n) {
 
+    // define um vetor constante com os indices de cada linha do board
     let lines = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
-    let selectedLines = []
+    let selectedLines = [];
 
+    // adiciona ao vetor da saida n elementos não aleatórios do vetor lines
     for (let i = 0; i < n; i++) {
         let index = randomNum(lines.length);
         selectedLines.push(lines[index])
@@ -69,71 +72,85 @@ function lineSelectorNoRepeat(n) {
 
 
 // COLOCA PALAVRAS NA HORIZONTAL
-function horizontalWords() {
+function horizontalWords(boardToChange) {
+
 
     // seleciona três palavras aleatorias
     let selectedWords = wordSelector(3);
 
-    // define um novo board usando a constante como referência
-    let newBoard = board.slice(0);
 
     // define as linhas onde serao colocadas as palavras baseado no numero de palvras que foram selecionadas
     let randomLines = lineSelectorNoRepeat(selectedWords.length);
 
+
     // itera entre as palavras selecionadas
     for (let i = 0; i < selectedWords.length; i++) {
 
-        // define onde a palavra pode começar no grid baseado em seu numero de caracteres
+
+        // define onde a palavra pode começar no grid baseado em seu numero de caracteres e na largura maxima do grid
         let maximumWordStart = 10 - (selectedWords[i].length - 1);
+
 
         // dentro destes casos possiveis gera um numero aleatorio para o começo da palavra
         let random = randomNum(maximumWordStart);
 
-        // itera entre cada palavra colocando os caracteres no board
+
+        // itera sobre a palavra alocando os caracteres no board
         for (let j = 0; j < selectedWords[i].length; j++) {
-            newBoard[randomLines[i]][random + j] = selectedWords[i].charAt(j)
+            boardToChange[randomLines[i]][random + j] = selectedWords[i].charAt(j)
         }
 
     }
-    return newBoard;
+    return boardToChange;
 }
+
 
 
 // COMPLETA O BOARD
-function completeBoard (board) {
+function completeBoard (boardToChange) {
+
 
     // completa os espaços em branco no board com letras aleatorias
-    for (let i = 0; i < board.length; i++) {
-        for (let j = 0; j < board[i].length; j++) {
+    for (let i = 0; i < boardToChange.length; i++) {
+        for (let j = 0; j < boardToChange[i].length; j++) {
             
+
             // agora as letras podem ser repetidas sem problema, melhora a randomização do board
             let randomLetter = alphabet[randomNum(alphabet.length)];
-            if (board[i][j] === ' ') {
-                board[i][j] = randomLetter;
+            if (boardToChange[i][j] === '') {
+                boardToChange[i][j] = randomLetter;
             }
+
         }
+
     }
-    return board;
+    return boardToChange;
 }
+
 
 
 // ENVIA OS DADOS DO BOARD PARA A PÁGINA
 function fillGridElements () {
     
-    // adiciona no html os elementos onde serão guardados os dados do jogo limpando o conteudo antigo se necessário
+    // prepara o container onde serão acrescentados os dados do board
     let gridContainer = document.getElementsByClassName('gameContainer')[0];
     while (gridContainer.firstChild) {
         gridContainer.removeChild(gridContainer.firstChild);
     }
 
+
+    // cria os novos elementos html usando o DOM
     for (let i = 0; i < (board.length)*(board[0].length); i++) {
         let newElement = document.createElement('span');
         newElement.classList.add('grid-item');
+        newElement.setAttribute("tabindex",'1');
         gridContainer.appendChild(newElement);
     }
 
-    // faz o posicionamento de cada elemento dentro do grid
-    let col = 1, row = 1;
+
+    // faz o posicionamento ordenado de cada espaço do grid
+    let col = 1
+    let row = 1;
     const items = document.querySelectorAll('.grid-item')
     items.forEach(item => {
         item.style.gridArea = `${row}/${col}`;
@@ -144,15 +161,26 @@ function fillGridElements () {
         }
     });
 
-    // passa os dados do board para um array 1d
-    let myBoard = horizontalWords();
-    myBoard = completeBoard(myBoard);
-    console.log(myBoard)    
-    let boardList = [];
-
-    for (let i = 0; i < myBoard.length; i++) {
-        boardList = boardList.concat(myBoard[i])
+    
+    // limpa o board para um novo tabuleiro
+    let newBoard = board
+    for (let i = 0; i < board.length; i++) {
+        for (let j = 0; j < board[0].length; j++) {
+            newBoard[i][j] = '';            
+        }
     }
+
+    // chamo as funções responsáveis por completar o board
+    newBoard = horizontalWords(newBoard)
+    newBoard = completeBoard(newBoard)
+
+
+    // passa os dados do board para um array 1d
+    let boardList = [];
+    for (let i = 0; i < newBoard.length; i++) {
+        boardList = boardList.concat(newBoard[i])
+    }
+
 
     // a partir do novo array, os elementos sao inseridos no grid
     for (let i = 0;i < boardList.length; i++) {
