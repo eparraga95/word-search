@@ -99,6 +99,77 @@ main {
         }
 
 
+    main .container .inputContainer {
+        /* display: none; */
+        max-width: 263px;
+        margin: 0 auto;
+        padding: 20px;
+
+        }
+        main .container .inputContainer label {
+            box-sizing: border-box;
+            font-size: var(--texts-size);
+            font-weight: bold;
+            color: var(--main-dark);
+            text-shadow: .5px .5px .5px var(--main-light);
+            padding-bottom: 30px;
+
+        }
+        main .container .inputContainer input {
+            box-sizing: border-box;
+            
+            font-size: var(--texts-size);
+            font-weight: bold;
+            color: var(--head-dark);
+            text-shadow: 1px 1px 1px var(--head-light);
+
+            max-width: 200px;
+            padding: 8px;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            border: none;
+            outline: none;
+            border-radius: 8px;
+            box-shadow: 3px 3px  var(--head-light);
+
+            background-color: var(--head-stand);
+
+        }
+            main .container .inputContainer input::placeholder {
+                color: var(--head-dark);
+            }
+        
+        main .container .inputContainer #wordsFound {
+            box-sizing: border-box;
+            font-size: var(--texts-size);
+            font-weight: bold;
+            color: var(--main-dark);
+            text-shadow: .5px .5px .5px var(--main-light);
+        }
+        
+        main .container .inputContainer #wordValidation {
+            font-size: var(--texts-size);
+            font-weight: bold;
+            color: var(--head-dark);
+            text-shadow: 1px 1px 1px var(--head-light);
+            background-color: var(--head-stand);
+            border: none;
+            border-radius: 8px;
+            box-shadow: 3px 3px  var(--head-light);
+            padding: 4px 16px 4px 16px;
+            margin-top: 20px;
+        }
+
+        main .container .inputContainer #wordsFound {
+            box-sizing: border-box;
+            font-size: var(--texts-size);
+            font-weight: bold;
+            color: var(--main-dark);
+            text-shadow: .5px .5px .5px var(--main-light);
+            padding: 10px 0;
+        }
+
+
 /* MEDIA QUERIES */
 @media screen and (min-width: 600px) {
 

@@ -38,6 +38,8 @@ function randomNum(n) {
 
 
 // SELECIONA PALAVRAS
+let wordsToValidate = '';
+
 function wordSelectorNoRepeat(n) {
 
     let wordCopy = palavras.slice()
@@ -48,6 +50,7 @@ function wordSelectorNoRepeat(n) {
         selectedWords.push(wordCopy[index]);
         wordCopy.splice(index, 1);
     }
+    wordsToValidate = selectedWords;
     return selectedWords;
 }
 
@@ -81,6 +84,7 @@ function wordPositioning(boardToChange) {
 
     // seleciona palavras aleatorias do banco de palavras sem repetição
     let selectedWords = wordSelectorNoRepeat(6);
+    console.log(selectedWords)
 
     // define as linhas onde serao colocadas as palavras baseado no numero de palvras que foram selecionadas
     let randomLines = lineSelectorNoRepeat(selectedWords.length-3);
@@ -164,7 +168,7 @@ function wordPositioning(boardToChange) {
             }
         }
     }
-
+    console.log(possibleVerticalPositions)
     // abro um vetor com as possiveis colunas
     let usedColumns = [0,1,2,3,4,5,6,7,8,9];
 
@@ -244,6 +248,12 @@ function completeBoard (boardToChange) {
 // ENVIA OS DADOS DO BOARD PARA A PÁGINA
 function fillGridElements () {
     
+    // limpa as palavras encontradas do jogo antigo
+    let lastGameWords = document.getElementById('wordsContainer');
+    while (lastGameWords.firstChild) {
+        lastGameWords.removeChild(lastGameWords.firstChild);
+    }
+
     // prepara o container onde serão acrescentados os dados do board
     let gridContainer = document.getElementsByClassName('gameContainer')[0];
     while (gridContainer.firstChild) {
@@ -303,6 +313,44 @@ function fillGridElements () {
 }
 let startGame = document.getElementById('startGame');
 startGame.addEventListener('click', fillGridElements);
+
+// ========================
+// VALIDAÇÃO DAS ENTRADAS
+// ========================
+
+function inputValidator () {
+
+    let foundWords = document.getElementById('wordsContainer');
+    let input = document.getElementById('userInput');
+    let found = document.getElementById('userInput').value
+    console.log(found);
+    let wordCounter = document.getElementById('wordsFound');
+    let words = wordsToValidate;
+
+    if (words.includes(found)) {
+        console.log(wordsFound)
+
+        // inclui a palavra encontrada na página
+        let newWordFound = document.createElement('span')
+        newWordFound.innerText = ` ${found} `
+        foundWords.appendChild(newWordFound)
+
+        // retira a palavra do nosso vetor para não contar como acerto novamente
+        let ind = words.indexOf(found)
+        words.splice(ind,1)
+
+        // limpa o campo de entrada
+        input.value = '';
+    }
+    console.log(words)
+
+    if (!words.length) {
+        window.alert('Parabéns Você encontrou todas as palavras! Aperte COMEÇAR para inciar um novo jogo!')
+    }
+}
+
+let submitButton = document.getElementById('wordValidation');
+submitButton.addEventListener('click', inputValidator)
 
 
 
