@@ -170,6 +170,7 @@ function wordPositioning(boardToChange) {
         if (!possibleVerticalPositions[i-1].length) {
             possibleVerticalPositions.splice(i-1,1)
             verticalWords.splice(i-1,1)
+            wordsToValidate.splice(3+(i-1),1)
             i--;
         }
     }
@@ -197,11 +198,12 @@ function wordPositioning(boardToChange) {
         if (!isColumnUsed) {
             possibleVerticalPositions.splice(i,1);
             verticalWords.splice(i,1);
+            wordsToValidate.splice(3+i,1)
             i--;
             continue
         }
         
-
+        
         // impede que as colunas sejam repetidas
         let selected = false;
         while (selected === false) {
@@ -227,7 +229,7 @@ function wordPositioning(boardToChange) {
             }
         }
     }
-
+    console.log(wordsToValidate)
     // imprimo as palavras no board
     console.log(finalVertCoords)
     for (let i = 0; i < verticalWords.length; i++) {
