@@ -114,14 +114,11 @@ function wordPositioning(boardToChange) {
     // =======================================
 
     // preparo um array com as palavras que vão ser colocadas na vertical
-    let verticalWords = selectedWords.slice(3)
-
+    let verticalWords = selectedWords.slice(3);
+    console.log(verticalWords)
+ 
     // varrer as colunas do board procurando por coordenadas onde seria possivel imprimir as palavras restantes não ignorando o fato de que as palavras na horizontal já foram impressas
-    let possibleVerticalPositions = {
-        0: [],
-        1: [],
-        2: []
-    }
+    let possibleVerticalPositions = [[],[],[]];
 
 
     // itero sobre o vetor que contém as palavras restantes
@@ -168,7 +165,16 @@ function wordPositioning(boardToChange) {
             }
         }
     }
-    console.log(possibleVerticalPositions)
+    
+    // antes de selecionar as posicoes de impressao das palavras na vertical, verifico se foram geradas coordenadas possíveis para todas as palavras
+
+    for (let i = 1; i <= possibleVerticalPositions.length; i++) {
+        if (!possibleVerticalPositions[i-1].length) {
+            possibleVerticalPositions.splice(i-1,1)
+            verticalWords.splice(i-1,1)
+            i--;
+        }
+    }
     // abro um vetor com as possiveis colunas
     let usedColumns = [0,1,2,3,4,5,6,7,8,9];
 
@@ -181,11 +187,28 @@ function wordPositioning(boardToChange) {
         // obtenho o tamanho desse conjunto
         let coordSize = Object.values(possibleVerticalPositions[i]).length;
 
-        // um booleando para usar como condição de saída do while
+        // verifica se as coordenadas da palavra atual, só possuem colunas já utilizadas
+        let isColumnUsed = false
+        for (let j = 0; j < coordSize; j++) {
+            let actualColumn = possibleVerticalPositions[i][j][0]
+
+            if (usedColumns[actualColumn] !== -1) {
+                isColumnUsed = true
+            }
+        }
+        if (!isColumnUsed) {
+            possibleVerticalPositions.splice(i,1);
+            verticalWords.splice(i,1);
+            i--;
+            continue
+        }
+        
+        
+        // um booleano para usar como condição de saída do while
         let selected = false;
-
+        
         while (selected === false) {
-
+            
             // pego um indice aleatório do conjunto de coordenadas
             let randomIndex = randomNum(coordSize);
 
@@ -209,17 +232,21 @@ function wordPositioning(boardToChange) {
     }
 
     // imprimo as palavras no board
+    console.log(finalVertCoords)
     for (let i = 0; i < verticalWords.length; i++) {
         let myCoord = finalVertCoords[i];
+        let vword = verticalWords[i]
         
-        for (let j = 0; j < verticalWords[i].length; j++) {
-            boardToChange[myCoord[1]+j][myCoord[0]] = verticalWords[i].charAt(j)
+        for (let j = 0; j < vword.length; j++) {
+            let x = myCoord[1]+j
+            let y = myCoord[0] 
+            boardToChange[x][y] = vword.charAt(j)
         }
     }
 
     return boardToChange;
 }
-
+// boardToChange[myCoord[1]+j][myCoord[0]] = verticalWords[i].charAt(j)
 
 
 // COMPLETA O BOARD
@@ -320,11 +347,16 @@ startGame.addEventListener('click', fillGridElements);
 
 function inputValidator () {
 
+    // elemento para levar as palavras encontradas
     let foundWords = document.getElementById('wordsContainer');
+
+    // captura o elemento input
     let input = document.getElementById('userInput');
+
+    // captura o valor da entrada do usuario
     let found = document.getElementById('userInput').value
-    console.log(found);
-    let wordCounter = document.getElementById('wordsFound');
+
+    // acessa as palavras que foram escolhidas
     let words = wordsToValidate;
 
     if (words.includes(found)) {

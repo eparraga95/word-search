@@ -169,6 +169,14 @@ main {
             padding: 10px 0;
         }
 
+        main .container .inputContainer #wordsContainer span {
+            box-sizing: border-box;
+            font-size: var(--texts-size);
+            font-weight: bold;
+            color: var(--game-stand);
+            text-shadow: .5px .5px .5px var(--game-light);
+        }
+
 
 /* MEDIA QUERIES */
 @media screen and (min-width: 600px) {
