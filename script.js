@@ -38,7 +38,7 @@ function randomNum(n) {
 
 
 // SELECIONA PALAVRAS
-function wordSelector(n) {
+function wordSelectorNoRepeat(n) {
 
     let wordCopy = palavras.slice()
     let selectedWords = [];
@@ -57,7 +57,7 @@ function wordSelector(n) {
 function lineSelectorNoRepeat(n) {
 
     // define um vetor constante com os indices de cada linha do board
-    let lines = [0,1,2,3,4,5,6,7,8,9]
+    const lines = [0,1,2,3,4,5,6,7,8,9]
     let selectedLines = [];
 
     // adiciona ao vetor da saida n elementos não aleatórios do vetor lines
@@ -80,8 +80,7 @@ function wordPositioning(boardToChange) {
 
 
     // seleciona palavras aleatorias do banco de palavras sem repetição
-    let selectedWords = wordSelector(6);
-    console.log(selectedWords)
+    let selectedWords = wordSelectorNoRepeat(6);
 
     // define as linhas onde serao colocadas as palavras baseado no numero de palvras que foram selecionadas
     let randomLines = lineSelectorNoRepeat(selectedWords.length-3);
@@ -149,13 +148,13 @@ function wordPositioning(boardToChange) {
                             let coordY = (y+j)-(verticalWords[i].length-1);
                             let coordX = x;
 
-                            // guardo i junto para saber futuramente sobre qual palavra aquela coordenada pertence
+                            // guardo no objeto as possiveis coordenadas de cada palavra
                             possibleVerticalPositions[i].push([coordX,coordY])
                         }
 
                     }
 
-                    // condições que zeram o contador: não é um espaço em branco, logo é uma letra que não é correspondente a que seria colocada nesta celula, com o contador zerado, esta posição é descartada
+                    // condições que zeram o contador: não é um espaço em branco e é uma letra que não é corresponde a que seria colocada nesta celula, com o contador zerado, esta posição é então descartada
                     if (boardToChange[y+j][x] !== "" && boardToChange[y+j][x] !== verticalWords[i].charAt(y)) {
 
                         counter = 0;
@@ -275,7 +274,7 @@ function fillGridElements () {
     });
 
     
-    // limpa o board para um novo tabuleiro
+    // limpa o board para um novo jogo
     let newBoard = board
     for (let i = 0; i < board.length; i++) {
         for (let j = 0; j < board[0].length; j++) {
@@ -295,7 +294,7 @@ function fillGridElements () {
     }
 
 
-    // a partir do novo array, os elementos sao inseridos no grid
+    // a partir do novo array, os elementos sao inseridos no grid da página
     for (let i = 0;i < boardList.length; i++) {
         let element = document.querySelectorAll('.grid-item')[i];
         element.innerText = `${boardList[i]}`
