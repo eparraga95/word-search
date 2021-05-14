@@ -57,7 +57,7 @@ function wordSelector(n) {
 function lineSelectorNoRepeat(n) {
 
     // define um vetor constante com os indices de cada linha do board
-    let lines = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
+    let lines = [0,1,2,3,4,5,6,7,8,9]
     let selectedLines = [];
 
     // adiciona ao vetor da saida n elementos não aleatórios do vetor lines
@@ -71,20 +71,24 @@ function lineSelectorNoRepeat(n) {
 
 
 
-// COLOCA PALAVRAS NA HORIZONTAL
-function horizontalWords(boardToChange) {
+
+function wordPositioning(boardToChange) {
+
+    // ======================
+    // PALAVRAS NA HORIZONTAL
+    // ======================
 
 
-    // seleciona três palavras aleatorias
-    let selectedWords = wordSelector(3);
-
+    // seleciona palavras aleatorias do banco de palavras sem repetição
+    let selectedWords = wordSelector(6);
+    console.log(selectedWords)
 
     // define as linhas onde serao colocadas as palavras baseado no numero de palvras que foram selecionadas
-    let randomLines = lineSelectorNoRepeat(selectedWords.length);
+    let randomLines = lineSelectorNoRepeat(selectedWords.length-3);
 
 
     // itera entre as palavras selecionadas
-    for (let i = 0; i < selectedWords.length; i++) {
+    for (let i = 0; i < selectedWords.length-3; i++) {
 
 
         // define onde a palavra pode começar no grid baseado em seu numero de caracteres e na largura maxima do grid
@@ -101,6 +105,101 @@ function horizontalWords(boardToChange) {
         }
 
     }
+
+    // ====================
+    // PALAVRAS NA VERTICAL 
+    // ====================
+
+    // preparo um array com as palavras que vão ser colocadas na vertical
+    let verticalWords = selectedWords.slice(3)
+
+    // varrer as colunas do board procurando por coordenadas onde seria possivel imprimir as palavras restantes não ignorando o fato de que as palavras na horizontal já foram impressas
+    let possibleVerticalPositions = {
+        0: [],
+        1: [],
+        2: []
+    }
+
+
+    // itero sobre o vetor que contém as palavras restantes
+    for (let i = 0; i < verticalWords.length; i++) {
+        
+        // valor maximo do indice onde a palavra pode começar na coluna, para ser impressa por completo
+        let maxWordStart = boardToChange[0].length - (verticalWords[i].length - 1)
+
+        // itero sobre cada coluna do board
+        for (let x = 0; x < boardToChange.length; x++) {
+
+            // itero sobre todas as posições possíveis da palavra i, na coluna x.
+            for (let j = 0; j < maxWordStart; j++) {
+
+                // zero o contador de confirmação a cada nova posição testada
+                let counter = 0;
+
+                // itero sobre cada palavra comparando o que já existe no board para poder imprimir palavras na vertical usando caractéres das palavras na horizontal que já foram impressas
+                for (let y = 0; y < verticalWords[i].length; y++) {
+
+                    // se a celula que estou testando é um espaço em branco ou exatamente a letra y da palavra i sendo testada no momento, o contador é acrescentado sem descartar esta posição
+                    if (boardToChange[y+j][x] === "" || boardToChange[y+j][x] === verticalWords[i].charAt(y) ) {
+
+                        counter++;
+
+                        // se o contador é igual ao tamanho da palavra quer dizer que a mesma pode ser impressa nesta posição, guardamos a posição com carinho
+                        if (counter === verticalWords[i].length) {
+                            let coordY = (y+j)-(verticalWords[i].length-1);
+                            let coordX = x;
+
+                            // guardo i junto para saber futuramente sobre qual palavra aquela coordenada pertence
+                            possibleVerticalPositions[i].push([coordX,coordY])
+                        }
+
+                    }
+
+                    // condições que zeram o contador: não é um espaço em branco, logo é uma letra que não é correspondente a que seria colocada nesta celula, com o contador zerado, esta posição é descartada
+                    if (boardToChange[y+j][x] !== "" && boardToChange[y+j][x] !== verticalWords[i].charAt(y)) {
+
+                        counter = 0;
+
+                    }
+                }
+            }
+        }
+    }
+    console.log(possibleVerticalPositions)
+
+    let usedColumns = [0,1,2,3,4,5,6,7,8,9];
+    let finalVertCoords = [];
+
+    for (let i = 0; i < Object.values(possibleVerticalPositions).length; i++) {
+
+        let coordSize = Object.values(possibleVerticalPositions[i]).length;
+
+        let selected = false;
+
+        while ( selected === false ) {
+
+            let randomIndex = randomNum(coordSize);
+            let selCol = possibleVerticalPositions[i][randomIndex][0];  
+
+            if (usedColumns[selCol] !== -1) {
+
+                finalVertCoords.push(possibleVerticalPositions[i][randomIndex]);
+                usedColumns[selCol] = -1;
+                selected = true;
+
+            }
+        }
+    }
+    console.log(finalVertCoords);
+
+    for (let i = 0; i < verticalWords.length; i++) {
+        let myCoord = finalVertCoords[i];
+        
+        for (let j = 0; j < verticalWords[i].length; j++) {
+            boardToChange[myCoord[1]+j][myCoord[0]] = verticalWords[i].charAt(j)
+        }
+    }
+
     return boardToChange;
 }
 
@@ -171,7 +270,7 @@ function fillGridElements () {
     }
 
     // chamo as funções responsáveis por completar o board
-    newBoard = horizontalWords(newBoard)
+    newBoard = wordPositioning(newBoard)
     newBoard = completeBoard(newBoard)
 
 
