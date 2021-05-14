@@ -71,12 +71,12 @@ function lineSelectorNoRepeat(n) {
 
 
 
-
+// POSICIONA AS PALAVRAS NO BOARD
 function wordPositioning(boardToChange) {
 
-    // ======================
-    // PALAVRAS NA HORIZONTAL
-    // ======================
+    // ==========================================
+    //          PALAVRAS NA HORIZONTAL
+    // ==========================================
 
 
     // seleciona palavras aleatorias do banco de palavras sem repetição
@@ -106,9 +106,9 @@ function wordPositioning(boardToChange) {
 
     }
 
-    // ====================
-    // PALAVRAS NA VERTICAL 
-    // ====================
+    // =======================================
+    //          PALAVRAS NA VERTICAL 
+    // =======================================
 
     // preparo um array com as palavras que vão ser colocadas na vertical
     let verticalWords = selectedWords.slice(3)
@@ -165,7 +165,6 @@ function wordPositioning(boardToChange) {
             }
         }
     }
-    console.log(possibleVerticalPositions);
 
     // abro um vetor com as possiveis colunas
     let usedColumns = [0,1,2,3,4,5,6,7,8,9];
