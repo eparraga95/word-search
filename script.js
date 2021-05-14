@@ -165,33 +165,48 @@ function wordPositioning(boardToChange) {
             }
         }
     }
-    console.log(possibleVerticalPositions)
+    console.log(possibleVerticalPositions);
 
+    // abro um vetor com as possiveis colunas
     let usedColumns = [0,1,2,3,4,5,6,7,8,9];
+
+    // abro um vetor para guardar as coordenadas selecionadas
     let finalVertCoords = [];
 
+    // itero sobre cada conjunto de coordenadas possíveis para cada palavra
     for (let i = 0; i < Object.values(possibleVerticalPositions).length; i++) {
-
+        
+        // obtenho o tamanho desse conjunto
         let coordSize = Object.values(possibleVerticalPositions[i]).length;
 
+        // um booleando para usar como condição de saída do while
         let selected = false;
 
-        while ( selected === false ) {
+        while (selected === false) {
 
+            // pego um indice aleatório do conjunto de coordenadas
             let randomIndex = randomNum(coordSize);
+
+            // para não repetir as colunas e sobreescrever as palavras guardamos a coluna dessa coordenada
             let selCol = possibleVerticalPositions[i][randomIndex][0];  
 
+            // se a coluna não foi utilizada ainda
             if (usedColumns[selCol] !== -1) {
 
+                // a coordenada é guardada no vetor
                 finalVertCoords.push(possibleVerticalPositions[i][randomIndex]);
+
+                // troco o valor da coluna por -1
                 usedColumns[selCol] = -1;
+
+                // sai do while
                 selected = true;
 
             }
         }
     }
-    console.log(finalVertCoords);
 
+    // imprimo as palavras no board
     for (let i = 0; i < verticalWords.length; i++) {
         let myCoord = finalVertCoords[i];
         
