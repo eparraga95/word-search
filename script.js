@@ -30,7 +30,7 @@ const board = [
 // =================
 
 
-// GERA UM NUMERO ALEATÓRIO DE 0 n-1
+// NUMERO ALEATÓRIO DE 0 A n-1
 function randomNum(n) {
     return Math.floor(Math.random() * n)
 }
@@ -115,7 +115,6 @@ function wordPositioning(boardToChange) {
 
     // preparo um array com as palavras que vão ser colocadas na vertical
     let verticalWords = selectedWords.slice(3);
-    console.log(verticalWords)
  
     // varrer as colunas do board procurando por coordenadas onde seria possivel imprimir as palavras restantes não ignorando o fato de que as palavras na horizontal já foram impressas
     let possibleVerticalPositions = [[],[],[]];
@@ -167,7 +166,6 @@ function wordPositioning(boardToChange) {
     }
     
     // antes de selecionar as posicoes de impressao das palavras na vertical, verifico se foram geradas coordenadas possíveis para todas as palavras
-
     for (let i = 1; i <= possibleVerticalPositions.length; i++) {
         if (!possibleVerticalPositions[i-1].length) {
             possibleVerticalPositions.splice(i-1,1)
@@ -182,10 +180,10 @@ function wordPositioning(boardToChange) {
     let finalVertCoords = [];
 
     // itero sobre cada conjunto de coordenadas possíveis para cada palavra
-    for (let i = 0; i < Object.values(possibleVerticalPositions).length; i++) {
+    for (let i = 0; i < possibleVerticalPositions.length; i++) {
         
         // obtenho o tamanho desse conjunto
-        let coordSize = Object.values(possibleVerticalPositions[i]).length;
+        let coordSize = possibleVerticalPositions[i].length;
 
         // verifica se as coordenadas da palavra atual, só possuem colunas já utilizadas
         let isColumnUsed = false
@@ -203,10 +201,9 @@ function wordPositioning(boardToChange) {
             continue
         }
         
-        
-        // um booleano para usar como condição de saída do while
+
+        // impede que as colunas sejam repetidas
         let selected = false;
-        
         while (selected === false) {
             
             // pego um indice aleatório do conjunto de coordenadas
@@ -348,7 +345,7 @@ startGame.addEventListener('click', fillGridElements);
 function inputValidator () {
 
     // elemento para levar as palavras encontradas
-    let foundWords = document.getElementById('wordsContainer');
+    let foundWordsElement = document.getElementById('wordsContainer');
 
     // captura o elemento input
     let input = document.getElementById('userInput');
@@ -360,12 +357,11 @@ function inputValidator () {
     let words = wordsToValidate;
 
     if (words.includes(found)) {
-        console.log(wordsFound)
 
         // inclui a palavra encontrada na página
         let newWordFound = document.createElement('span')
         newWordFound.innerText = ` ${found} `
-        foundWords.appendChild(newWordFound)
+        foundWordsElement.appendChild(newWordFound)
 
         // retira a palavra do nosso vetor para não contar como acerto novamente
         let ind = words.indexOf(found)
@@ -374,16 +370,18 @@ function inputValidator () {
         // limpa o campo de entrada
         input.value = '';
     }
-    console.log(words)
 
     if (!words.length) {
         window.alert('Parabéns Você encontrou todas as palavras! Aperte COMEÇAR para inciar um novo jogo!')
     }
 }
-
 let submitButton = document.getElementById('wordValidation');
 submitButton.addEventListener('click', inputValidator)
 
+// let input = document.getElementById('userInput');
+// input.addEventListener("keyup", function(event){
+//     if (KeyboardEvent: 0x001C)
+// });
 
 
 
