@@ -164,7 +164,7 @@ function wordPositioning(boardToChange) {
             }
         }
     }
-    console.log(possibleVerticalPositions)
+
     // verifico se foram geradas coordenadas possíveis para todas as palavras
     for (let i = 1; i <= possibleVerticalPositions.length; i++) {
         if (!possibleVerticalPositions[i-1].length) {
@@ -174,7 +174,7 @@ function wordPositioning(boardToChange) {
             i--;
         }
     }
-    console.log(possibleVerticalPositions)
+
     // abro um vetor com as possiveis colunas
     let usedColumns = [0,1,2,3,4,5,6,7,8,9];
 
@@ -231,9 +231,8 @@ function wordPositioning(boardToChange) {
             }
         }
     }
-    console.log(wordsToValidate)
+
     // imprimo as palavras no board
-    console.log(finalVertCoords)
     for (let i = 0; i < verticalWords.length; i++) {
         let myCoord = finalVertCoords[i];
         let vword = verticalWords[i]
@@ -247,7 +246,7 @@ function wordPositioning(boardToChange) {
 
     return boardToChange;
 }
-// boardToChange[myCoord[1]+j][myCoord[0]] = verticalWords[i].charAt(j)
+
 
 
 // COMPLETA O BOARD
@@ -276,6 +275,11 @@ function completeBoard (boardToChange) {
 // ENVIA OS DADOS DO BOARD PARA A PÁGINA
 function fillGridElements () {
     
+    // abre o interface do jogo pro usuario
+    let gameArea = document.querySelector('.inputContainer')
+    gameArea.style.display = "inherit";
+
+
     // limpa as palavras encontradas do jogo antigo
     let lastGameWords = document.getElementById('wordsContainer');
     while (lastGameWords.firstChild) {
@@ -342,6 +346,9 @@ function fillGridElements () {
 let startGame = document.getElementById('startGame');
 startGame.addEventListener('click', fillGridElements);
 
+
+
+
 // ========================
 // VALIDAÇÃO DAS ENTRADAS
 // ========================
@@ -375,6 +382,9 @@ function inputValidator () {
         input.value = '';
     }
 
+    console.log(words)
+
+    // condição de vitória
     if (!words.length) {
         window.alert('Parabéns Você encontrou todas as palavras! Aperte COMEÇAR para inciar um novo jogo!')
     }
@@ -382,9 +392,10 @@ function inputValidator () {
 let submitButton = document.getElementById('wordValidation');
 submitButton.addEventListener('click', inputValidator)
 
+// funcionalidade do botão ao pressionar enter
 let input = document.querySelector('#userInput');
 input.addEventListener("keydown", e =>{
-    console.log(e)
+
     if(e.keyCode === 13) {
         e.preventDefault()
         document.querySelector('#wordValidation').click();

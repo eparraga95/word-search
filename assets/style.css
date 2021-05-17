@@ -48,6 +48,8 @@ main {
     }
     main .container {
         text-align: center;
+        margin: 0 auto;
+
     }
     main .container h2 {
         font-size: var(--subtt-size);
@@ -100,7 +102,7 @@ main {
 
 
     main .container .inputContainer {
-        /* display: none; */
+        display: none;
         max-width: 263px;
         margin: 0 auto;
         padding: 20px;
@@ -182,6 +184,9 @@ main {
 @media screen and (min-width: 600px) {
 
 /* GERAL */
+main .container {
+    max-width: 600px;
+}
 /* BODY */
 /* HEADER */
 /* MAIN */
@@ -192,6 +197,9 @@ main {
 @media screen and (min-width: 900px) {
 
 /* GERAL */
+main .container {
+    max-width: 900px;
+}
 /* BODY */
 /* HEADER */
 /* MAIN */
