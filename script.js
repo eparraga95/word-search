@@ -164,8 +164,8 @@ function wordPositioning(boardToChange) {
             }
         }
     }
-    
-    // antes de selecionar as posicoes de impressao das palavras na vertical, verifico se foram geradas coordenadas possíveis para todas as palavras
+    console.log(possibleVerticalPositions)
+    // verifico se foram geradas coordenadas possíveis para todas as palavras
     for (let i = 1; i <= possibleVerticalPositions.length; i++) {
         if (!possibleVerticalPositions[i-1].length) {
             possibleVerticalPositions.splice(i-1,1)
@@ -174,6 +174,7 @@ function wordPositioning(boardToChange) {
             i--;
         }
     }
+    console.log(possibleVerticalPositions)
     // abro um vetor com as possiveis colunas
     let usedColumns = [0,1,2,3,4,5,6,7,8,9];
 
@@ -186,21 +187,22 @@ function wordPositioning(boardToChange) {
         // obtenho o tamanho desse conjunto
         let coordSize = possibleVerticalPositions[i].length;
 
-        // verifica se as coordenadas da palavra atual, só possuem colunas já utilizadas
-        let isColumnUsed = false
+        // itera sobre todo o conjunto de coordenadas gerado para a palavra atual, verificando se nele existe pelo menos uma coordenada que não usa a ou as colunas já utilizadas para a ou as anteriores
+        let isColumnUnused = false
         for (let j = 0; j < coordSize; j++) {
             let actualColumn = possibleVerticalPositions[i][j][0]
 
             if (usedColumns[actualColumn] !== -1) {
-                isColumnUsed = true
+                isColumnUnused = true
             }
         }
-        if (!isColumnUsed) {
+        // se em todo o conjunto não foi encontrada ao menos uma possivel coordenada que não é em nenhuma coluna já usada, essa palavra é removida do jogo
+        if (!isColumnUnused) {
             possibleVerticalPositions.splice(i,1);
             verticalWords.splice(i,1);
             wordsToValidate.splice(3+i,1)
             i--;
-            continue
+            continue 
         }
         
         
@@ -212,16 +214,16 @@ function wordPositioning(boardToChange) {
             let randomIndex = randomNum(coordSize);
 
             // para não repetir as colunas e sobreescrever as palavras guardamos a coluna dessa coordenada
-            let selCol = possibleVerticalPositions[i][randomIndex][0];  
+            let selectedCol = possibleVerticalPositions[i][randomIndex][0];  
 
             // se a coluna não foi utilizada ainda
-            if (usedColumns[selCol] !== -1) {
+            if (usedColumns[selectedCol] !== -1) {
 
                 // a coordenada é guardada no vetor
                 finalVertCoords.push(possibleVerticalPositions[i][randomIndex]);
 
                 // troco o valor da coluna por -1
-                usedColumns[selCol] = -1;
+                usedColumns[selectedCol] = -1;
 
                 // sai do while
                 selected = true;
@@ -380,10 +382,14 @@ function inputValidator () {
 let submitButton = document.getElementById('wordValidation');
 submitButton.addEventListener('click', inputValidator)
 
-// let input = document.getElementById('userInput');
-// input.addEventListener("keyup", function(event){
-//     if (KeyboardEvent: 0x001C)
-// });
+let input = document.querySelector('#userInput');
+input.addEventListener("keydown", e =>{
+    console.log(e)
+    if(e.keyCode === 13) {
+        e.preventDefault()
+        document.querySelector('#wordValidation').click();
+    }
+});
 
 
 
