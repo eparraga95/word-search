@@ -275,10 +275,14 @@ function completeBoard (boardToChange) {
 // ENVIA OS DADOS DO BOARD PARA A PÁGINA
 function fillGridElements () {
     
-    // abre o interface do jogo pro usuario
+    // abre a interface do jogo pro usuario
     let gameArea = document.querySelector('.inputContainer')
     gameArea.style.display = "inherit";
 
+    let gameGrid = document.querySelector('.gridContainer');
+    gameGrid.style.display = "grid"
+    gameGrid.style.gridTemplateRows = "1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr";
+    gameGrid.style.gridTemplateColumns = "1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr";
 
     // limpa as palavras encontradas do jogo antigo
     let lastGameWords = document.getElementById('wordsContainer');
@@ -286,8 +290,13 @@ function fillGridElements () {
         lastGameWords.removeChild(lastGameWords.firstChild);
     }
 
+    // limpa msg de erro
+    let errorMsgContainer = document.querySelector('#errorMessage');
+    errorMsgContainer.innerText = '';
+
+
     // prepara o container onde serão acrescentados os dados do board
-    let gridContainer = document.getElementsByClassName('gameContainer')[0];
+    let gridContainer = document.getElementsByClassName('gridContainer')[0];
     while (gridContainer.firstChild) {
         gridContainer.removeChild(gridContainer.firstChild);
     }
@@ -352,8 +361,14 @@ startGame.addEventListener('click', fillGridElements);
 // ========================
 // VALIDAÇÃO DAS ENTRADAS
 // ========================
-
+let foundWords = [];
 function inputValidator () {
+
+    
+
+    // elemento da mensagem de erro
+    let errorMsgContainer = document.querySelector('#errorMessage');
+
 
     // elemento para levar as palavras encontradas
     let foundWordsElement = document.getElementById('wordsContainer');
@@ -363,16 +378,21 @@ function inputValidator () {
 
     // captura o valor da entrada do usuario
     let found = document.getElementById('userInput').value
+    found = found.toUpperCase();
+    console.log(found)
 
     // acessa as palavras que foram escolhidas
     let words = wordsToValidate;
 
+
     if (words.includes(found)) {
+        // remove a msg de erro caso ativada
+        errorMsgContainer.innerText = ''
 
         // inclui a palavra encontrada na página
-        let newWordFound = document.createElement('span')
-        newWordFound.innerText = ` ${found} `
-        foundWordsElement.appendChild(newWordFound)
+        let newWordFound = document.createElement('span');
+        newWordFound.innerText = ` ${found} `;
+        foundWordsElement.appendChild(newWordFound);
 
         // retira a palavra do nosso vetor para não contar como acerto novamente
         let ind = words.indexOf(found)
@@ -380,14 +400,34 @@ function inputValidator () {
 
         // limpa o campo de entrada
         input.value = '';
-    }
 
+        // guarda a palavra encontrada para alterar a msg de erro
+        foundWords.push(found);
+    } 
+    
+    else {
+        
+        if (foundWords.includes(found)) {
+            errorMsgContainer.innerText = '';
+            errorMsgContainer.innerText = `${found} já foi encontrada!`
+        } else if (found === '') {
+            errorMsgContainer.innerText = 'Mas não tem nada aqui?!'
+        } else {
+            errorMsgContainer.innerText = '';
+            errorMsgContainer.innerText = `${found} não está no jogo!`
+        }
+        // limpa o campo de entrada
+        input.value = '';
+    }
+    
     console.log(words)
 
     // condição de vitória
     if (!words.length) {
         window.alert('Parabéns Você encontrou todas as palavras! Aperte COMEÇAR para inciar um novo jogo!')
     }
+
+
 }
 let submitButton = document.getElementById('wordValidation');
 submitButton.addEventListener('click', inputValidator)

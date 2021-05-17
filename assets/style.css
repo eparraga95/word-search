@@ -51,6 +51,11 @@ main {
         margin: 0 auto;
 
     }
+    main .container .fullGameContainer {
+        /* display: flex;
+        flex-flow: column wrap; */
+        /* revisar responsividade */
+    }
     main .container h2 {
         font-size: var(--subtt-size);
         font-weight: bold;
@@ -75,8 +80,11 @@ main {
             background-color: var(--game-stand);
             box-shadow: 1px 1px var(--game-light) ;
             transform: translate(2px,2px);
-        }       
-    main .container .gameContainer {
+        } 
+        
+        
+    main .container .gridContainer {
+        display: none;
         max-width: 263px;
         margin: 0 auto;
         box-sizing: border-box;
@@ -85,20 +93,18 @@ main {
         background-color: var(--game-stand);
         box-shadow: 3px 3px 3px var(--game-light);
         
-        display: grid;
-        grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
-        grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+    
 
     }
-    main .container .gameContainer .grid-item {
-        font-size: var(--texts-size);
-        font-weight: bold;
-        padding: 4px 0;
-        border: 1px solid var(--game-dark);
+        main .container .gridContainer .grid-item {
+            font-size: var(--texts-size);
+            font-weight: bold;
+            padding: 4px 0;
+            border: 1px solid var(--game-dark);
         }
-        main .container .gameContainer .grid-item:focus {
-            background-color: var(--game-light);
-        }
+            main .container .gridContainer .grid-item:focus {
+                background-color: var(--game-light);
+            }
 
 
     main .container .inputContainer {
@@ -141,14 +147,6 @@ main {
                 color: var(--head-dark);
             }
         
-        main .container .inputContainer #wordsFound {
-            box-sizing: border-box;
-            font-size: var(--texts-size);
-            font-weight: bold;
-            color: var(--main-dark);
-            text-shadow: .5px .5px .5px var(--main-light);
-        }
-        
         main .container .inputContainer #wordValidation {
             font-size: var(--texts-size);
             font-weight: bold;
@@ -162,13 +160,22 @@ main {
             margin-top: 20px;
         }
 
+        main .container .inputContainer #errorMessage {
+            height: 37px;
+            margin: 0 auto;
+            font-size: var(--texts-size);
+            font-weight: bold;
+            color: red;
+
+        }
+
         main .container .inputContainer #wordsFound {
             box-sizing: border-box;
             font-size: var(--texts-size);
             font-weight: bold;
             color: var(--main-dark);
             text-shadow: .5px .5px .5px var(--main-light);
-            padding: 10px 0;
+            padding: 20px 0 10px 0;
         }
 
         main .container .inputContainer #wordsContainer span {

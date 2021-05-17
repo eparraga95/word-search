@@ -25,15 +25,26 @@
                 Você consegue encontrar todas as palavras?
             </h2>
             <button id="startGame">Começar</button>
-            <div class="gameContainer"></div>
-            <div class="inputContainer">
+            
+            <div class="fullGameContainer">
+                <div class="gridContainer"></div>
+
+                <div class="inputContainer">
+
                 <label for="userInput">Achou uma palavra? Digite-a aqui:</label>
                 <br>
-                <input type="text" id="userInput" name="userInput" placeholder="Exemplo: AMAR">
+                <input type="text" id="userInput" name="userInput" placeholder="Exemplo: AMAR" maxlength="10">
+
+                <div id="errorMessage"></div>
+
                 <div id="wordsFound">Palavras encontradas:</div>
+
                 <div id="wordsContainer"></div>
+
                 <button id="wordValidation">Achei!</button>
             </div>
+            </div>
+            
         </div>
     </main>
 
