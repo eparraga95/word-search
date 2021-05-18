@@ -52,7 +52,6 @@ function wordPositioning(boardToChange) {
         wordStoreCopy.splice(index, 1);
     }
     wordsToValidate = selectedWords;
-    console.log(selectedWords)
     
     // PALAVRAS NA HORIZONTAL
 
@@ -68,7 +67,6 @@ function wordPositioning(boardToChange) {
         selectedLines.push(lines[randomIndex]);
         lines.splice(randomIndex,1);
     }
-    console.log(selectedLines)
     
 
     // posicionamento no board
@@ -79,7 +77,10 @@ function wordPositioning(boardToChange) {
         let randomStartCol = randomNum(maxWordStart);
 
         for (let col = 0; col < selectedWords[currentWord].length; col++) {
-            boardToChange[selectedLines[currentWord]][randomStartCol + col] = selectedWords[currentWord].charAt(col)
+
+            let x = selectedLines[currentWord];
+            let y = randomStartCol + col;
+            boardToChange[x][y] = selectedWords[currentWord].charAt(col)
         }
 
     }
@@ -131,7 +132,6 @@ function wordPositioning(boardToChange) {
         }
     }
 
-    console.log(vertWordsAllCoords);
 
     // verifico se foram geradas coordenadas possíveis para todas as palavras
     for (let word = 1; word <= vertWordsAllCoords.length; word++) {
@@ -191,7 +191,6 @@ function wordPositioning(boardToChange) {
             }
         }
     }
-    console.log(finalVertCoords)
 
     // posicionamento no board
     for (let word = 0; word < verticalWords.length; word++) {
@@ -295,7 +294,6 @@ function fillGridElements () {
         let element = document.querySelectorAll('.grid-item')[i];
         element.innerText = `${boardList[i]}`
     }
-    console.log(boardList[0],boardList[10],boardList[20],boardList[30])
     console.log(wordsToValidate)
 }
 let startGame = document.getElementById('startGame');
@@ -305,7 +303,8 @@ startGame.addEventListener('click', fillGridElements);
 
 // VALIDAÇÃO DAS ENTRADAS
 let foundWords = [];
-function inputValidator () {
+function inputValidator (event) {
+    event.preventDefault();
 
     // elemento da mensagem de erro
     let errorMsgContainer = document.querySelector('#errorMessage');
@@ -370,16 +369,5 @@ function inputValidator () {
 }
 let submitButton = document.getElementById('wordValidation');
 submitButton.addEventListener('click', inputValidator)
-
-// funcionalidade do botão ao pressionar enter
-let input = document.querySelector('#userInput');
-input.addEventListener("keydown", e =>{
-
-    if(e.keyCode === 13) {
-        e.preventDefault()
-        document.querySelector('#wordValidation').click();
-    }
-});
-
 
 
