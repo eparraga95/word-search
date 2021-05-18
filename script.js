@@ -7,7 +7,7 @@ const alphabet = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M
 
 
 // banco de palavras para usar no jogo
-const palavras = ['APRENDER', 'ESCUTAR', 'DOR', 'CONFORTO', 'KENZIE', 'FAZER', 'TENTAR', 'SABER', 'ENTENDER', 'ENSINO', 'PROGRAMAR', 'TESTAR', 'ENTRAR', 'PSIQUE', 'ERRAR', 'LER', 'FALAR', 'GOSTAR', 'PROBLEMA', 'LONGE'];
+const wordStorage = ['APRENDER', 'ESCUTAR', 'DOR', 'CONFORTO', 'KENZIE', 'FAZER', 'TENTAR', 'SABER', 'ENTENDER', 'ENSINO', 'PROGRAMAR', 'TESTAR', 'ENTRAR', 'PSIQUE', 'ERRAR', 'LER', 'FALAR', 'GOSTAR', 'PROBLEMA', 'LONGE'];
 
 
 // o board (tabuleiro) do jogo
@@ -37,125 +37,91 @@ function randomNum(n) {
 
 
 
-// SELECIONA PALAVRAS
-let wordsToValidate = '';
-
-function wordSelectorNoRepeat(n) {
-
-    let wordCopy = palavras.slice()
-    let selectedWords = [];
-
-    for (let i = 0; i < n; i++) {
-        let index = randomNum(wordCopy.length);
-        selectedWords.push(wordCopy[index]);
-        wordCopy.splice(index, 1);
-    }
-    wordsToValidate = selectedWords;
-    return selectedWords;
-}
-
-
-
-// SELECIONA LINHAS
-function lineSelectorNoRepeat(n) {
-
-    // define um vetor constante com os indices de cada linha do board
-    const lines = [0,1,2,3,4,5,6,7,8,9]
-    let selectedLines = [];
-
-    // adiciona ao vetor da saida n elementos não aleatórios do vetor lines
-    for (let i = 0; i < n; i++) {
-        let index = randomNum(lines.length);
-        selectedLines.push(lines[index])
-        lines.splice(index, 1);
-    }
-    return selectedLines;
-}
-
-
-
 // POSICIONA AS PALAVRAS NO BOARD
+let numberOfWords = 6;
+let wordsToValidate = '';
 function wordPositioning(boardToChange) {
 
-    // ==========================================
-    //          PALAVRAS NA HORIZONTAL
-    // ==========================================
+    // seleção das palavras
+    let selectedWords = [];
+    let wordStoreCopy = wordStorage.slice(0);
 
-
-    // seleciona palavras aleatorias do banco de palavras sem repetição
-    let selectedWords = wordSelectorNoRepeat(6);
+    for (let i = 0; i < numberOfWords; i++) {
+        let index = randomNum(wordStoreCopy.length);
+        selectedWords.push(wordStoreCopy[index]);
+        wordStoreCopy.splice(index, 1);
+    }
+    wordsToValidate = selectedWords;
     console.log(selectedWords)
+    
+    // PALAVRAS NA HORIZONTAL
 
-    // define as linhas onde serao colocadas as palavras baseado no numero de palvras que foram selecionadas
-    let randomLines = lineSelectorNoRepeat(selectedWords.length-3);
+    let horizontalWords = selectedWords.slice(0,3);
+    let totalHorizontalWords = horizontalWords.length;
 
+    // seleção das linhas
+    const lines = [0,1,2,3,4,5,6,7,8,9];
+    let selectedLines = [];
 
-    // itera entre as palavras selecionadas
-    for (let i = 0; i < selectedWords.length-3; i++) {
+    for (let i = 0; i < 3; i++) {
+        let randomIndex = randomNum(lines.length);
+        selectedLines.push(lines[randomIndex]);
+        lines.splice(randomIndex,1);
+    }
+    console.log(selectedLines)
+    
 
+    // posicionamento no board
+    for (let currentWord = 0; currentWord < totalHorizontalWords; currentWord++) {
 
-        // define onde a palavra pode começar no grid baseado em seu numero de caracteres e na largura maxima do grid
-        let maximumWordStart = 10 - (selectedWords[i].length - 1);
+        let maxWordStart = 10 - (selectedWords[currentWord].length - 1);
 
+        let randomStartCol = randomNum(maxWordStart);
 
-        // dentro destes casos possiveis gera um numero aleatorio para o começo da palavra
-        let random = randomNum(maximumWordStart);
-
-
-        // itera sobre a palavra alocando os caracteres no board
-        for (let j = 0; j < selectedWords[i].length; j++) {
-            boardToChange[randomLines[i]][random + j] = selectedWords[i].charAt(j)
+        for (let col = 0; col < selectedWords[currentWord].length; col++) {
+            boardToChange[selectedLines[currentWord]][randomStartCol + col] = selectedWords[currentWord].charAt(col)
         }
 
     }
 
-    // =======================================
-    //          PALAVRAS NA VERTICAL 
-    // =======================================
+    // PALAVRAS NA VERTICAL 
 
-    // preparo um array com as palavras que vão ser colocadas na vertical
     let verticalWords = selectedWords.slice(3);
+    let totalVerticalWords = verticalWords.length;
  
-    // varrer as colunas do board procurando por coordenadas onde seria possivel imprimir as palavras restantes não ignorando o fato de que as palavras na horizontal já foram impressas
-    let possibleVerticalPositions = [[],[],[]];
+    // calcular coordenadas possíveis para cada palavra
+    let vertWordsAllCoords = [[],[],[]];
 
-
-    // itero sobre o vetor que contém as palavras restantes
-    for (let i = 0; i < verticalWords.length; i++) {
+    for (let currentWord = 0; currentWord < totalVerticalWords; currentWord++) {
         
-        // valor maximo do indice onde a palavra pode começar na coluna, para ser impressa por completo
-        let maxWordStart = boardToChange[0].length - (verticalWords[i].length - 1)
+        let maxWordStart = boardToChange[0].length - (verticalWords[currentWord].length - 1)
 
-        // itero sobre cada coluna do board
-        for (let x = 0; x < boardToChange.length; x++) {
+        for (let col = 0; col < boardToChange.length; col++) {
 
-            // itero sobre todas as posições possíveis da palavra i, na coluna x.
-            for (let j = 0; j < maxWordStart; j++) {
+            for (let testRow = 0; testRow < maxWordStart; testRow++) {
 
-                // zero o contador de confirmação a cada nova posição testada
                 let counter = 0;
+                
+                for (let wordChar = 0; wordChar < verticalWords[currentWord].length; wordChar++) {
+                    
+                    let y = testRow + wordChar;
+                    let x = col
 
-                // itero sobre cada palavra comparando o que já existe no board para poder imprimir palavras na vertical usando caractéres das palavras na horizontal que já foram impressas
-                for (let y = 0; y < verticalWords[i].length; y++) {
-
-                    // se a celula que estou testando é um espaço em branco ou exatamente a letra y da palavra i sendo testada no momento, o contador é acrescentado sem descartar esta posição
-                    if (boardToChange[y+j][x] === "" || boardToChange[y+j][x] === verticalWords[i].charAt(y) ) {
+                    if (boardToChange[y][x] === "" || boardToChange[y][x] === verticalWords[currentWord].charAt(wordChar) ) {
 
                         counter++;
 
-                        // se o contador é igual ao tamanho da palavra quer dizer que a mesma pode ser impressa nesta posição, guardamos a posição com carinho
-                        if (counter === verticalWords[i].length) {
-                            let coordY = (y+j)-(verticalWords[i].length-1);
-                            let coordX = x;
+                        if (counter === verticalWords[currentWord].length) {
 
-                            // guardo no objeto as possiveis coordenadas de cada palavra
-                            possibleVerticalPositions[i].push([coordX,coordY])
-                        }
+                            let coordY = testRow;
+                            let coordX = col;
 
-                    }
+                            vertWordsAllCoords[currentWord].push([coordX,coordY])   // coluna,linha
+                        }                                       
 
-                    // condições que zeram o contador: não é um espaço em branco e é uma letra que não é corresponde a que seria colocada nesta celula, com o contador zerado, esta posição é então descartada
-                    if (boardToChange[y+j][x] !== "" && boardToChange[y+j][x] !== verticalWords[i].charAt(y)) {
+                    } 
+                    
+                    else {
 
                         counter = 0;
 
@@ -165,82 +131,77 @@ function wordPositioning(boardToChange) {
         }
     }
 
+    console.log(vertWordsAllCoords);
+
     // verifico se foram geradas coordenadas possíveis para todas as palavras
-    for (let i = 1; i <= possibleVerticalPositions.length; i++) {
-        if (!possibleVerticalPositions[i-1].length) {
-            possibleVerticalPositions.splice(i-1,1)
-            verticalWords.splice(i-1,1)
-            wordsToValidate.splice(3+(i-1),1)
-            i--;
+    for (let word = 1; word <= vertWordsAllCoords.length; word++) {
+
+        if (!vertWordsAllCoords[word-1].length) {
+
+            vertWordsAllCoords.splice(word-1,1)         //  
+            verticalWords.splice(word-1,1)              //  removem a palavra do jogo
+            wordsToValidate.splice(3+(word-1),1)        //
+
+            word--;                                     //  repassa a informação de alteração do tamanho do vetor sendo iterado
         }
+
     }
 
-    // abro um vetor com as possiveis colunas
-    let usedColumns = [0,1,2,3,4,5,6,7,8,9];
-
-    // abro um vetor para guardar as coordenadas selecionadas
     let finalVertCoords = [];
 
-    // itero sobre cada conjunto de coordenadas possíveis para cada palavra
-    for (let i = 0; i < possibleVerticalPositions.length; i++) {
+    let usedColumns = [0,1,2,3,4,5,6,7,8,9];
+    for (let word = 0; word < vertWordsAllCoords.length; word++) {
         
-        // obtenho o tamanho desse conjunto
-        let coordSize = possibleVerticalPositions[i].length;
+        let currentWordCoords = vertWordsAllCoords[word].length;
 
-        // itera sobre todo o conjunto de coordenadas gerado para a palavra atual, verificando se nele existe pelo menos uma coordenada que não usa a ou as colunas já utilizadas para a ou as anteriores
-        let isColumnUnused = false
-        for (let j = 0; j < coordSize; j++) {
-            let actualColumn = possibleVerticalPositions[i][j][0]
+        // caso a palavra só tenha coordenadas possiveis nas colunas já usadas pelas anteriores, a palavra é removida
+        let isColumnAvaible = false
+        for (let coord = 0; coord < currentWordCoords; coord++) {
 
-            if (usedColumns[actualColumn] !== -1) {
-                isColumnUnused = true
+            let currentColumn = vertWordsAllCoords[word][coord][0]
+
+            if (usedColumns[currentColumn] !== -1) {
+                isColumnAvaible = true
             }
         }
-        // se em todo o conjunto não foi encontrada ao menos uma possivel coordenada que não é em nenhuma coluna já usada, essa palavra é removida do jogo
-        if (!isColumnUnused) {
-            possibleVerticalPositions.splice(i,1);
-            verticalWords.splice(i,1);
-            wordsToValidate.splice(3+i,1)
-            i--;
+        
+        if (!isColumnAvaible) {
+
+            vertWordsAllCoords.splice(word,1);
+            verticalWords.splice(word,1);
+            wordsToValidate.splice(3+word,1)
+            word--;
             continue 
         }
         
-        
+
         // impede que as colunas sejam repetidas
         let selected = false;
         while (selected === false) {
             
-            // pego um indice aleatório do conjunto de coordenadas
-            let randomIndex = randomNum(coordSize);
+            let randomIndex = randomNum(currentWordCoords);
 
-            // para não repetir as colunas e sobreescrever as palavras guardamos a coluna dessa coordenada
-            let selectedCol = possibleVerticalPositions[i][randomIndex][0];  
+            let selectedCol = vertWordsAllCoords[word][randomIndex][0];  
 
-            // se a coluna não foi utilizada ainda
             if (usedColumns[selectedCol] !== -1) {
 
-                // a coordenada é guardada no vetor
-                finalVertCoords.push(possibleVerticalPositions[i][randomIndex]);
-
-                // troco o valor da coluna por -1
+                finalVertCoords.push(vertWordsAllCoords[word][randomIndex]);
                 usedColumns[selectedCol] = -1;
-
-                // sai do while
                 selected = true;
-
             }
         }
     }
+    console.log(finalVertCoords)
 
-    // imprimo as palavras no board
-    for (let i = 0; i < verticalWords.length; i++) {
-        let myCoord = finalVertCoords[i];
-        let vword = verticalWords[i]
+    // posicionamento no board
+    for (let word = 0; word < verticalWords.length; word++) {
+        let selectedCoord = finalVertCoords[word];
+        let currentWord = verticalWords[word]
         
-        for (let j = 0; j < vword.length; j++) {
-            let x = myCoord[1]+j
-            let y = myCoord[0] 
-            boardToChange[x][y] = vword.charAt(j)
+        for (let wordChar = 0; wordChar < currentWord.length; wordChar++) {
+            let y = selectedCoord[1] + wordChar
+            let x = selectedCoord[0] 
+            boardToChange[y][x] = currentWord.charAt(wordChar)
         }
     }
 
@@ -252,16 +213,16 @@ function wordPositioning(boardToChange) {
 // COMPLETA O BOARD
 function completeBoard (boardToChange) {
 
+    let totalRows = boardToChange.length;
+    let totalCols = boardToChange[0].length
 
     // completa os espaços em branco no board com letras aleatorias
-    for (let i = 0; i < boardToChange.length; i++) {
-        for (let j = 0; j < boardToChange[i].length; j++) {
+    for (let row = 0; row < totalRows; row++) {
+        for (let col = 0; col < totalCols; col++) {
             
-
-            // agora as letras podem ser repetidas sem problema, melhora a randomização do board
             let randomLetter = alphabet[randomNum(alphabet.length)];
-            if (boardToChange[i][j] === '') {
-                boardToChange[i][j] = randomLetter;
+            if (boardToChange[row][col] === '') {
+                boardToChange[row][col] = randomLetter;
             }
 
         }
@@ -276,19 +237,18 @@ function completeBoard (boardToChange) {
 function fillGridElements () {
     
     // abre a interface do jogo pro usuario
-    let gameArea = document.querySelector('.inputContainer')
-    gameArea.style.display = "inherit";
+    let gameArea = document.querySelector('#mainInput')
+    gameArea.classList.remove('inputContainer')
+    gameArea.classList.add('inputContainerShown')
 
-    let gameGrid = document.querySelector('.gridContainer');
-    gameGrid.style.display = "grid"
-    gameGrid.style.gridTemplateRows = "1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr";
-    gameGrid.style.gridTemplateColumns = "1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr";
+    let gameGrid = document.querySelector('#mainGrid');
+    gameGrid.classList.remove('gridContainer');
+    gameGrid.classList.add('gridContainerShown')
+
 
     // limpa as palavras encontradas do jogo antigo
     let lastGameWords = document.getElementById('wordsContainer');
-    while (lastGameWords.firstChild) {
-        lastGameWords.removeChild(lastGameWords.firstChild);
-    }
+    lastGameWords.innerHTML = '';
 
     // limpa msg de erro
     let errorMsgContainer = document.querySelector('#errorMessage');
@@ -296,35 +256,20 @@ function fillGridElements () {
 
 
     // prepara o container onde serão acrescentados os dados do board
-    let gridContainer = document.getElementsByClassName('gridContainer')[0];
-    while (gridContainer.firstChild) {
-        gridContainer.removeChild(gridContainer.firstChild);
-    }
-
+    let gridContainer = document.getElementById('mainGrid');
+    gridContainer.innerHTML = '';
 
     // cria os novos elementos html usando o DOM
-    for (let i = 0; i < (board.length)*(board[0].length); i++) {
-        let newElement = document.createElement('span');
-        newElement.classList.add('grid-item');
-        newElement.setAttribute("tabindex",'1');
-        gridContainer.appendChild(newElement);
+    for (let row = 0; row < board.length; row++) {
+        for (let col = 0; col < board[0].length; col++) {
+            let newElement = document.createElement('span');
+            newElement.classList.add('grid-item');
+            newElement.style.gridArea = `${row + 1}/${col + 1}`;
+            newElement.setAttribute("tabindex",'1');
+            gridContainer.appendChild(newElement);
+        }
     }
 
-
-    // faz o posicionamento ordenado de cada espaço do grid
-    let col = 1
-    let row = 1;
-    const items = document.querySelectorAll('.grid-item')
-    items.forEach(item => {
-        item.style.gridArea = `${row}/${col}`;
-        col++;
-        if(col>10){
-            col=1;
-            row++;
-        }
-    });
-
-    
     // limpa o board para um novo jogo
     let newBoard = board
     for (let i = 0; i < board.length; i++) {
@@ -346,25 +291,21 @@ function fillGridElements () {
 
 
     // a partir do novo array, os elementos sao inseridos no grid da página
-    for (let i = 0;i < boardList.length; i++) {
+    for (let i = 0; i < boardList.length; i++) {
         let element = document.querySelectorAll('.grid-item')[i];
         element.innerText = `${boardList[i]}`
     }
-
+    console.log(boardList[0],boardList[10],boardList[20],boardList[30])
+    console.log(wordsToValidate)
 }
 let startGame = document.getElementById('startGame');
 startGame.addEventListener('click', fillGridElements);
 
 
 
-
-// ========================
 // VALIDAÇÃO DAS ENTRADAS
-// ========================
 let foundWords = [];
 function inputValidator () {
-
-    
 
     // elemento da mensagem de erro
     let errorMsgContainer = document.querySelector('#errorMessage');
@@ -379,44 +320,44 @@ function inputValidator () {
     // captura o valor da entrada do usuario
     let found = document.getElementById('userInput').value
     found = found.toUpperCase();
+    found = found.trim();
     console.log(found)
 
-    // acessa as palavras que foram escolhidas
+    // outputs
     let words = wordsToValidate;
 
-
     if (words.includes(found)) {
-        // remove a msg de erro caso ativada
         errorMsgContainer.innerText = ''
 
-        // inclui a palavra encontrada na página
         let newWordFound = document.createElement('span');
         newWordFound.innerText = ` ${found} `;
         foundWordsElement.appendChild(newWordFound);
 
-        // retira a palavra do nosso vetor para não contar como acerto novamente
-        let ind = words.indexOf(found)
-        words.splice(ind,1)
+        let index = words.indexOf(found)
+        words.splice(index,1)
 
-        // limpa o campo de entrada
         input.value = '';
 
-        // guarda a palavra encontrada para alterar a msg de erro
         foundWords.push(found);
     } 
     
     else {
         
         if (foundWords.includes(found)) {
+
             errorMsgContainer.innerText = '';
             errorMsgContainer.innerText = `${found} já foi encontrada!`
-        } else if (found === '') {
+        }
+        else if (found === '') {
+
             errorMsgContainer.innerText = 'Mas não tem nada aqui?!'
-        } else {
+        } 
+        else {
+
             errorMsgContainer.innerText = '';
             errorMsgContainer.innerText = `${found} não está no jogo!`
         }
-        // limpa o campo de entrada
+
         input.value = '';
     }
     
@@ -426,8 +367,6 @@ function inputValidator () {
     if (!words.length) {
         window.alert('Parabéns Você encontrou todas as palavras! Aperte COMEÇAR para inciar um novo jogo!')
     }
-
-
 }
 let submitButton = document.getElementById('wordValidation');
 submitButton.addEventListener('click', inputValidator)

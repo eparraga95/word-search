@@ -41,80 +41,89 @@ header {
         color: var(--head-dark);
         text-shadow: 2px 2px 2px var(--head-light);
     }
+
 /* MAIN */
+
 main {
     width: 100%;
     background-color: var(--main-stand);
-    }
+}
     main .container {
         text-align: center;
         margin: 0 auto;
 
     }
+
+        main .container h2 {
+            font-size: var(--subtt-size);
+            font-weight: bold;
+            color: var(--main-dark);
+            text-shadow: 1px 1px 1px var(--main-light);
+            padding-bottom: 30px;
+        }
+        main .container button#startGame {
+            font-size: var(--subtt-size);
+            font-weight: bold;
+            color: var(--head-dark);
+            text-shadow: 1px 1px 1px var(--head-light);
+            background-color: var(--head-stand);
+            border: none;
+            border-radius: 8px;
+            box-shadow: 3px 3px  var(--head-light);
+            padding: 8px 32px 8px 32px;
+            margin-bottom: 30px;
+        }   
+            main .container button#startGame:hover {
+                color: var(--game-dark);
+                text-shadow: 1px 1px 1px var(--game-light);
+                background-color: var(--game-stand);
+                box-shadow: 1px 1px var(--game-light) ;
+                transform: translate(2px,2px);
+            } 
+    
     main .container .fullGameContainer {
-        /* display: flex;
-        flex-flow: column wrap; */
-        /* revisar responsividade */
+        display: flex;
+        flex-flow: column nowrap;
+        align-items: center;
     }
-    main .container h2 {
-        font-size: var(--subtt-size);
-        font-weight: bold;
-        color: var(--main-dark);
-        text-shadow: 1px 1px 1px var(--main-light);
-        padding-bottom: 30px;
-    }
-    main .container #startGame {
-        font-size: var(--subtt-size);
-        font-weight: bold;
-        color: var(--head-dark);
-        text-shadow: 1px 1px 1px var(--head-light);
-        background-color: var(--head-stand);
-        border: none;
-        border-radius: 8px;
-        box-shadow: 3px 3px  var(--head-light);
-        padding: 8px 32px 8px 32px;
-    }   
-        main .container #startGame:hover {
-            color: var(--game-dark);
-            text-shadow: 1px 1px 1px var(--game-light);
-            background-color: var(--game-stand);
-            box-shadow: 1px 1px var(--game-light) ;
-            transform: translate(2px,2px);
-        } 
-        
         
     main .container .gridContainer {
         display: none;
-        max-width: 263px;
-        margin: 0 auto;
-        box-sizing: border-box;
-        margin-top: 30px;
-        border: 4px solid var(--game-dark);
-        background-color: var(--game-stand);
-        box-shadow: 3px 3px 3px var(--game-light);
-        
-    
-
     }
-        main .container .gridContainer .grid-item {
-            font-size: var(--texts-size);
-            font-weight: bold;
-            padding: 4px 0;
-            border: 1px solid var(--game-dark);
+        main .container .gridContainerShown {
+            display: grid;
+            grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+            grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+
+            width: 280px;
+            margin: 0 10px 0 10px;
+            box-sizing: border-box;
+            border: 4px solid var(--game-dark);
+            background-color: var(--game-stand);
+            box-shadow: 3px 3px 3px var(--game-light);
         }
-            main .container .gridContainer .grid-item:focus {
-                background-color: var(--game-light);
+            main .container .gridContainerShown .grid-item {
+                font-size: var(--texts-size);
+                font-weight: bold;
+                padding: 4px 0;
+                border: 1px solid var(--game-dark);
             }
+                main .container .gridContainerShown .grid-item:focus {
+                    background-color: var(--game-light);
+                }
+
 
 
     main .container .inputContainer {
         display: none;
+        }
+
+    main .container .inputContainerShown {
         max-width: 263px;
         margin: 0 auto;
-        padding: 20px;
-
-        }
-        main .container .inputContainer label {
+        padding: 20px 0;
+    }
+        main .container .inputContainerShown label {
             box-sizing: border-box;
             font-size: var(--texts-size);
             font-weight: bold;
@@ -123,44 +132,50 @@ main {
             padding-bottom: 30px;
 
         }
-        main .container .inputContainer input {
-            box-sizing: border-box;
-            
-            font-size: var(--texts-size);
-            font-weight: bold;
-            color: var(--head-dark);
-            text-shadow: 1px 1px 1px var(--head-light);
 
-            max-width: 200px;
-            padding: 8px;
-            margin-top: 20px;
-            margin-bottom: 20px;
-            border: none;
-            outline: none;
-            border-radius: 8px;
-            box-shadow: 3px 3px  var(--head-light);
+        main .container .inputContainerShown .formContainer {
+            display: flex;
+            flex-flow: row nowrap;
 
-            background-color: var(--head-stand);
-
+            padding: 16px 0;
         }
-            main .container .inputContainer input::placeholder {
+            main .container .inputContainerShown .formContainer input#userInput {
+                box-sizing: border-box;
+                border: none;
+                outline: none;
+
+                font-size: var(--texts-size);
+                font-weight: bold;
                 color: var(--head-dark);
+                text-shadow: 1px 1px 1px var(--head-light);
+                box-shadow: 3px 3px  var(--head-light);
+                background-color: var(--head-stand);
+
+                max-width: 65%;
+                padding: 8px;
+                border-radius: 8px;
             }
+                main .container .inputContainerShown .formContainer input#userInput::placeholder {
+                    color: var(--head-dark);
+                }
         
-        main .container .inputContainer #wordValidation {
+        main .container .inputContainerShown .formContainer button{
+            box-sizing: border-box;
             font-size: var(--texts-size);
             font-weight: bold;
-            color: var(--head-dark);
-            text-shadow: 1px 1px 1px var(--head-light);
-            background-color: var(--head-stand);
+            color: var(--game-dark);
+            text-shadow: 1px 1px 1px var(--game-light);
+            background-color: var(--game-stand);
+
             border: none;
             border-radius: 8px;
-            box-shadow: 3px 3px  var(--head-light);
-            padding: 4px 16px 4px 16px;
-            margin-top: 20px;
+            box-shadow: 3px 3px  var(--game-light);
+            
+            width: 35%;
+            padding: 0;
         }
 
-        main .container .inputContainer #errorMessage {
+        main .container .inputContainerShown div#errorMessage {
             height: 37px;
             margin: 0 auto;
             font-size: var(--texts-size);
@@ -169,16 +184,20 @@ main {
 
         }
 
-        main .container .inputContainer #wordsFound {
+        main .container .inputContainerShown div#wordsFound {
             box-sizing: border-box;
             font-size: var(--texts-size);
             font-weight: bold;
             color: var(--main-dark);
             text-shadow: .5px .5px .5px var(--main-light);
-            padding: 20px 0 10px 0;
+            padding: 10px 0 10px 0;
         }
 
-        main .container .inputContainer #wordsContainer span {
+        main .container .inputContainerShown div#wordsContainer {
+            height: 72px;
+        }
+
+        main .container .inputContainerShown div#wordsContainer span {
             box-sizing: border-box;
             font-size: var(--texts-size);
             font-weight: bold;
@@ -188,28 +207,29 @@ main {
 
 
 /* MEDIA QUERIES */
-@media screen and (min-width: 600px) {
+@media screen and (min-width: 768px) {
 
 /* GERAL */
 main .container {
-    max-width: 600px;
+    max-width: 768px;
 }
 /* BODY */
+
 /* HEADER */
+
 /* MAIN */
+main .container .fullGameContainer {
+    display: flex;
+    flex-flow: row nowrap;
 
-
+    padding-top: 60px;
+    padding-bottom: 60px;
 }
-
-@media screen and (min-width: 900px) {
-
-/* GERAL */
-main .container {
-    max-width: 900px;
-}
-/* BODY */
-/* HEADER */
-/* MAIN */
-
+    main .container .gridContainerShown {
+        margin: 0 auto;
+    }
+    main .container .inputContainerShown {
+        margin: 0 auto;
+    }
 
 }
