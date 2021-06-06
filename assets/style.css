@@ -71,7 +71,7 @@ main {
             border-radius: 8px;
             box-shadow: 3px 3px  var(--head-light);
             padding: 8px 32px 8px 32px;
-            margin-bottom: 30px;
+            margin-bottom: 16px;
         }   
             main .container button#startGame:hover {
                 color: var(--game-dark);
@@ -79,7 +79,16 @@ main {
                 background-color: var(--game-stand);
                 box-shadow: 1px 1px var(--game-light) ;
                 transform: translate(2px,2px);
-            } 
+            }
+
+        main .container .clock {
+            font-size: var(--subtt-size);
+            font-weight: bold;
+            color: var(--head-stand);
+            text-shadow: 1px 1px var(--head-light);
+
+            margin-bottom: 16px;
+        }
     
     main .container .fullGameContainer {
         display: flex;

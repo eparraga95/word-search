@@ -51,12 +51,21 @@ function wordPositioning(boardToChange) {
         selectedWords.push(wordStoreCopy[index]);
         wordStoreCopy.splice(index, 1);
     }
-    wordsToValidate = selectedWords;
+    console.log(selectedWords)
+    wordsToValidate = selectedWords.slice(0,4);
+
     
+    // invertendo algumas palavras
+    selectedWords[0] = selectedWords[0].split('').reverse().join('');
+    selectedWords[2] = selectedWords[2].split('').reverse().join('');
+    selectedWords[4] = selectedWords[4].split('').reverse().join('');
+
     // PALAVRAS NA HORIZONTAL
 
-    let horizontalWords = selectedWords.slice(0,3);
+    let horizontalWords = selectedWords.slice(0,2);
     let totalHorizontalWords = horizontalWords.length;
+
+    console.log('horz:' + horizontalWords)
 
     // seleção das linhas
     const lines = [0,1,2,3,4,5,6,7,8,9];
@@ -87,15 +96,17 @@ function wordPositioning(boardToChange) {
 
     // PALAVRAS NA VERTICAL 
 
-    let verticalWords = selectedWords.slice(3);
+    let verticalWords = selectedWords.slice(2,4);
     let totalVerticalWords = verticalWords.length;
+
+    console.log('vert:' + verticalWords)
  
     // calcular coordenadas possíveis para cada palavra
     let vertWordsAllCoords = [[],[],[]];
 
     for (let currentWord = 0; currentWord < totalVerticalWords; currentWord++) {
         
-        let maxWordStart = boardToChange[0].length - (verticalWords[currentWord].length - 1)
+        let maxWordStart = boardToChange.length - (verticalWords[currentWord].length - 1)
 
         for (let col = 0; col < boardToChange.length; col++) {
 
@@ -204,6 +215,13 @@ function wordPositioning(boardToChange) {
         }
     }
 
+    // PALAVRAS NA DIAGONAL
+
+    let diagonalWords = selectedWords.slice(4,6);
+    console.log('diag:' + diagonalWords)
+
+
+
     return boardToChange;
 }
 
@@ -230,11 +248,45 @@ function completeBoard (boardToChange) {
     return boardToChange;
 }
 
+// Clock
+let secondCount = 0;
+
+let storeInterval;
+
+const displayP = document.querySelector('.clock');
+
+const displayCount = () => {
+
+    let minutes = Math.floor((secondCount % 3600)/60);
+    let seconds = Math.floor(secondCount % 60)
+
+    let displayMinutes = (minutes < 10) ? '0' + minutes : minutes;
+    let displaySeconds = (seconds < 10) ? '0' + seconds : seconds;
+
+    displayP.textContent = displayMinutes + ':' + displaySeconds;
+
+    secondCount++;
+
+    // Limitando o tempo
+    if (secondCount === 121) {
+
+        clearInterval(storeInterval);
+
+        secondCount = 0;
+
+        window.alert('Você não conseguiu encontrar todas as palavras a tempo! Quem sabe na próxima...')
+
+        // desabilita submits
+        submitButton.disabled = true;
+    }
+}
 
 
 // ENVIA OS DADOS DO BOARD PARA A PÁGINA
 function fillGridElements () {
     
+    submitButton.disabled = false;
+
     // abre a interface do jogo pro usuario
     let gameArea = document.querySelector('#mainInput')
     gameArea.classList.remove('inputContainer')
@@ -298,7 +350,12 @@ function fillGridElements () {
 }
 let startGame = document.getElementById('startGame');
 startGame.addEventListener('click', fillGridElements);
-
+startGame.addEventListener('click', () => {
+    secondCount = 0;
+    clearInterval(storeInterval);
+    storeInterval = setInterval(displayCount, 1000);
+})
+displayCount();
 
 
 // VALIDAÇÃO DAS ENTRADAS
@@ -365,6 +422,10 @@ function inputValidator (event) {
     // condição de vitória
     if (!words.length) {
         window.alert('Parabéns Você encontrou todas as palavras! Aperte COMEÇAR para inciar um novo jogo!')
+
+        clearInterval(storeInterval);
+        secondCount = 0;
+        displayCount();
     }
 }
 let submitButton = document.getElementById('wordValidation');
